@@ -3,10 +3,18 @@ SERVER
     
     SCRIPT
         -[L] if bestaudio fails, attempt to do post-processing instead
+    
+    YOUTUBER
+        -[H] calls the music.sh bash script
+        -[H] gets new file info (script modded to dump json file)
+        -[H] loads the newly created file
+        -[M] lists all available songs(files)
+    
     SERVICE
         -[H] create the platform that will listen in for connections using sockets
-        -[H] determine streaming method for android, TCP/IP ??? 
         -[M] create authentication method to connect to ONLY one device
+        -[~] determine streaming method for android, TCP/IP 
+        
     PLAYLIST
         -[L] get all of the songs and send list to client 
         -[L] remove extensions when sending list
