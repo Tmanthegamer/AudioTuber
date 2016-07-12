@@ -49,3 +49,4 @@ AudioTuberClient/_sandbox
 ## Server Files
 ####################################
 AudioTuberServer/storage/*
+AudioTuberServer/*.out

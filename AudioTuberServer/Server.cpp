@@ -99,17 +99,20 @@ int main (void)
     Server *svr = new Server();
 
     #if 1 // Used for testing purposes
-    char* data = (char*) malloc(PACKET_SIZE);
-    sprintf(data, "")
-    if((result = ParseHeaderData(data)) != SUCCESS)
+    //char* data = (char*) malloc(PACKET_SIZE);
+    int result;
+    char* data = "[0][https://www.youtube.com/watch?v=_wjpQG9e9xA&list=RD_GRW6N]";
+    if((result = svr->ParseHeaderData(data)) != SUCCESS)
     {
         return result;
     } 
 
-    if((result = DownloadSong(data)) != SUCCESS)
+    if((result = svr->DownloadSong(data)) != SUCCESS)
     {
         return result;
     }
+
+    free(data);
     #endif
 
     #if 0
@@ -264,63 +267,6 @@ int Server::BindSocketAndListen()
 }
 
 /*---------------------------------------------------------------------------------
---  FUNCTION:       Bind Socket And Listen to Socket
---
---  DATE:           March 13, 2016 
---
---  REVISED:        (None)                      
---
---  DESIGNER:       Tyler Trepanier
---
---  PROGRAMMER:     Tyler Trepanier
---
---  INTERFACE:      int Server::SetSocketOpt()
---
---  PARAMETERS:     void
---                      Takes in no parameters
---
---  RETURNS:        int error
---                      -Returns 0 when there is no error with Program execution
---                      -Returns TOOMANYCLIENTSERROR (40) when there are too 
---                          many client connections. 
---
---  NOTES:
---  Takes the message delivered by a client and sends that message (appended
---  previously with the sendee's username) and delivers the message to all the
---  other clients. After sending to all the client, it will send an ACK to the
---  client, indicating a successful sending. 
---
---  In case there is a client disconnection during the time of sending, the error 
---  will be ignored and will handle the errors later on in the select function.
----------------------------------------------------------------------------------*/
-int Server::WriteToAllClients(char* data, size_t datasize, int client)
-{
-    char ack[1] = { ACK };
-    if(_maxi >= FD_SETSIZE)
-	{
-        fprintf (stderr, "Too many clients in WriteToAllClients\n");
-        return TOOMANYCLIENTSERROR;
-	}
-
-	for (int i = 0; i <= _maxi; i++)
-	{
-		if (_client[i] < 0 || _client[i] == client)
-        {
-            continue; 
-		}
-		else
-        {
-			//Ignore any errors when failing to write to a client.
-			send(_client[i], data, datasize, 0);
-		}
-	}
-
-    send(client, ack, 1, 0); // Send a success message to the original sender.
-
-    return SUCCESS;
-}
-
-/*---------------------------------------------------------------------------------
 --  FUNCTION:       Receive Packet From Client
 --
 --  DATE:           March 13, 2016 (Tyler Trepanier)
@@ -462,7 +408,7 @@ int Server::HandleYoutubeRequest(int client_sd, int index)
     int result = 0;
     char* data = (char*) malloc(PACKET_SIZE);
 
-    if((result = ReceiveHeaderFromClient(_client[i], i, data)) != SUCCESS)
+    if((result = ReceiveHeaderFromClient(_client[index], index, data)) != SUCCESS)
     {
         return result;
     }
@@ -480,7 +426,7 @@ int Server::HandleYoutubeRequest(int client_sd, int index)
     return SUCCESS;
 }
 
-int DownloadSong(char* url)
+int Server::DownloadSong(char* url)
 {
     //" \"fulltitle\": "
     return SUCCESS;
@@ -666,7 +612,7 @@ int Server::AcceptNewConnection()
     }
     #endif
 
-    AddUserToConnections(buf, inet_ntoa(_client_addr.sin_addr), new_sd);
+    AddUserToConnections(inet_ntoa(_client_addr.sin_addr), new_sd);
 
 	FD_SET (new_sd, &_all_set); 	// add new descriptor to set
 
