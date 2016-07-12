@@ -101,7 +101,7 @@ int main (void)
     #if 1 // Used for testing purposes
     //char* data = (char*) malloc(PACKET_SIZE);
     int result;
-    char* data = "[0][https://www.youtube.com/watch?v=_wjpQG9e9xA&list=RD_GRW6N]";
+    char data[256] = "[0][https://www.youtube.com/watch?v=_wjpQG9e9xA&list=RD_GRW6N]";
     if((result = svr->ParseHeaderData(data)) != SUCCESS)
     {
         return result;
@@ -112,7 +112,6 @@ int main (void)
         return result;
     }
 
-    free(data);
     #endif
 
     #if 0
@@ -396,9 +395,7 @@ int Server::ParseHeaderData(char* data)
     {
         return -1;
     }
-
     memcpy(data, url, strlen(url));
-    std::cout << "Data:[" << data << "]" << std::endl;
 
     return SUCCESS;
 }
