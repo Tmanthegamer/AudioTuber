@@ -48,4 +48,4 @@ AudioTuberClient/_sandbox
 ####################################
 ## Server Files
 ####################################
-AudioTuberServer/storage/*.m4a
+AudioTuberServer/storage/*

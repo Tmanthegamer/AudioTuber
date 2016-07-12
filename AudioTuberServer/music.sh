@@ -12,8 +12,8 @@ fi
 
 #youtube-dl -q -f 140 -o ${TUBER}/${STORAGE} ${URL}
 
-youtube-dl -f 'bestaudio[ext=m4a]' -o ${TUBER}/${STORAGE} ${URL} 
+youtube-dl -f 'bestaudio[ext=m4a]' --write-info-json -o ${TUBER}/${STORAGE} ${URL} 
 
 sleep 10
-echo "Goodbye"
+echo "File located at:[${TUBER}/${STORAGE}]"
 
