@@ -1,3 +1,13 @@
+=========================================================================
+LEGEND:
+    TASK    -   Generalized title of task list
+    [~]     -   Priority level unknown
+    [H]     -   Priority level high
+    [M]     -   Priority level medium
+    [L]     -   Priority level low
+    FIN     -   Finished task
+=========================================================================
+
 #########################################################################
 SERVER
     
@@ -5,10 +15,13 @@ SERVER
         -[L] if bestaudio fails, attempt to do post-processing instead
     
     YOUTUBER
-        -[H] calls the music.sh bash script
+        -[M] calls the music.sh bash script
         -[H] gets new file info (script modded to dump json file)
         -[H] loads the newly created file
         -[M] lists all available songs(files)
+    SONG
+        -[H] SongQueued and SongReady inherits from Song
+        -[H] SongQueued and SongReady inherits from Song
     
     SERVICE
         -[H] create the platform that will listen in for connections using sockets

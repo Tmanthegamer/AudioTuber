@@ -30,6 +30,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>        // For mode constants
 #include "Server.h"
+#include "Song.h"
 
 class Youtuber
 {
@@ -47,13 +48,13 @@ public:
 
     int UploadSong(char* song);
 
-    std::vector<std::string> GrabAllSongs();
+    std::vector<std::string> InitializeSongReadyList();
     
 
 private:
     Server svr;
-    std::vector<std::string> _queue;    // Queue for songs to be downloaded
-    std::vector<std::string> _ready;    // Queue for songs that are ready
+    std::vector<Song> _queue;    // Queue for songs to be downloaded
+    std::vector<Song> _ready;    // Queue for songs that are ready
 };
 
 #endif //YOUTUBER_H
