@@ -10,10 +10,11 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-#youtube-dl -q -f 140 -o ${TUBER}/${STORAGE} ${URL}
+#youtube-dl -q -f 140 -o ${TUBER}/${STORAGE} ${URL} #original test
+
+#youtube-dl -f 'bestaudio[ext=m4a]' --verbose -o ${TUBER}/${STORAGE} ${URL} #without json
 
 youtube-dl -f 'bestaudio[ext=m4a]' --write-info-json -o ${TUBER}/${STORAGE} ${URL} 
 
-sleep 10
 echo "File located at:[${TUBER}/${STORAGE}]"
 

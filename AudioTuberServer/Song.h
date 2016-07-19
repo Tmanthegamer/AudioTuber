@@ -32,27 +32,33 @@
 class Song
 {
 public: // Public methods
-    Song(std::string name, std::string fp);
+    Song(std::string name, std::string fp, std::string ext);
 
     Song(std::string url);
     
-    ~Song(){}
+    ~Song();
 
+    /* Getters */
     std::string getSongName();
 
     std::string getSongFilePath();
 
     std::string getSongUrl();
 
+    std::string getSongExt();
+
     const bool& isExists();
 
-    void setSongName(std::string name);
+    /* Setters */
+    void setSongName(const std::string name);
 
-    void setSongFilePath(std::string name);
+    void setSongFilePath(const std::string name);
 
-    void setSongUrl(std::string name);
+    void setSongUrl(const std::string name);
 
-    void setSongExists(bool exists);
+    void setSongExists(const bool exists);
+
+    void setSongExt(const std::string ext);
     
 public: // Public variables
     static int SongsInQueue;
@@ -61,6 +67,7 @@ private:
     std::string _name;
     std::string _fp;
     std::string _url;
+    std::string _ext;
     bool        _inSystem;
 
 };

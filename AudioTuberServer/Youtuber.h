@@ -29,6 +29,9 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>        // For mode constants
+#include "boost/filesystem/operations.hpp"
+#include "boost/filesystem/path.hpp"
+#include "boost/progress.hpp"
 #include "Server.h"
 #include "Song.h"
 
@@ -44,15 +47,21 @@ public:
 
     int GetFileSize(char* file);
 
+    const std::vector<std::string> GetReadySongList();
+
     char* PrepareNextPacket();
 
     int UploadSong(char* song);
 
-    std::vector<std::string> InitializeSongReadyList();
+    bool InitializeSongReadyList();
+
+    bool SetServer(const Server& svr);
     
+private: // Private Methods
+
 
 private:
-    Server svr;
+    Server _svr;
     std::vector<Song> _queue;    // Queue for songs to be downloaded
     std::vector<Song> _ready;    // Queue for songs that are ready
 };
