@@ -38,14 +38,17 @@ public: // Public methods
     
     ~Song();
 
+    /* Operators */
+    bool operator==(const Song& song) const;
+
     /* Getters */
-    std::string getSongName();
+    std::string getSongName() const;
 
-    std::string getSongFilePath();
+    std::string getSongFilePath() const;
 
-    std::string getSongUrl();
+    std::string getSongUrl() const;
 
-    std::string getSongExt();
+    std::string getSongExt() const;
 
     const bool& isExists();
 
@@ -68,6 +71,7 @@ private:
     std::string _fp;
     std::string _url;
     std::string _ext;
+    std::string _json;
     bool        _inSystem;
 
 };

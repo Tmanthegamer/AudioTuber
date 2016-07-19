@@ -1,3 +1,3 @@
 ./music.sh https://www.youtube.com/watch?v=_wjpQG9e9xA&list=RD_GRW6N
 
-# compile with: "g++ *.cpp -lboost_system -lboost_filesystem"
+# compile with: "g++ *.cpp -lboost_system -lboost_filesystem -lboost_thread"

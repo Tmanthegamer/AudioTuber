@@ -2,18 +2,24 @@
 
 int Song::SongsInQueue = 0;
 
+bool Song::operator==(const Song& song) const
+{
+    return getSongFilePath() == song.getSongFilePath();
+}
+
 Song::Song(std::string name, std::string fp, std::string ext)
-    :_name(name), 
+    :_name(name),
      _fp(fp),
      _ext(ext),
      _url(std::string("")), 
      _inSystem(true)
 {
-
+    _json = name.append(".info.json");
 }
 
 Song::Song(std::string url)
     :_name(std::string("")), 
+     _json(std::string("")),
      _fp(std::string("")), 
      _ext(std::string("")),
      _url(url), 
@@ -27,22 +33,22 @@ Song::~Song()
     if(!_inSystem) SongsInQueue--;
 }
 
-std::string Song::getSongName()
+std::string Song::getSongName() const
 {
     return _name;
 }
 
-std::string Song::getSongUrl()
+std::string Song::getSongUrl() const
 {
     return _url;
 }
 
-std::string Song::getSongFilePath()
+std::string Song::getSongFilePath() const
 {
     return _fp;
 }
 
-std::string Song::getSongExt()
+std::string Song::getSongExt() const
 {
     return _ext;
 }
