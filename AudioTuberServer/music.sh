@@ -26,11 +26,14 @@ function DownloadSong() {
             if [[ $NAME == *".info.json" ]]
             then
                 GOING=$((GOING + 2))
+                echo -n "\"${URL}\":" >>"${TEMP}/newsongs.txt"
                 cat "${TEMP}/${NAME}" | jq '.fulltitle' >>"${TEMP}/newsongs.txt"
                 break
             fi
         done
     done
+    
+    echo "Completed task."
     
 }
 

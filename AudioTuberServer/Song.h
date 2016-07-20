@@ -59,7 +59,7 @@ public: // Public methods
 
     void setSongUrl(const std::string name);
 
-    void setSongExists(const bool exists);
+    void setSongExists(const std::string name, const std::string fp, const std::string ext);
 
     void setSongExt(const std::string ext);
     

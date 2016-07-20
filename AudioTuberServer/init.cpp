@@ -35,14 +35,39 @@
 --  Main entry into the program. Simply creates an instance of a server, initializes 
 --  the server and begins the server program.
 -------------------------------------------------------------------------------------*/
-int main (void)
+int main (int argc, char** argv)
 {
     Server *svr = new Server();
-
-    #if 1
-    
     Youtuber* tube = new Youtuber();
+    #if 1
+    switch(argc)
+    {
+        case 2:
+        {
+            tube->FindSongName(argv[1]);
+        }
+            break;
+        default: //argc > 1
+            break;
+    }
+    #endif
 
+    #if 0
+    //In progress, working on getting song name from file
+    switch(argc)
+    {
+        case 1:
+            break;
+        default: //argc > 1
+        {
+            std::vector<std::string> v;
+            for(int i = 1; i < argc; i++)
+            {
+                std::cout << "Doing:" << argv[i] << std::endl;
+                tube->RunYoutubeDL(argv[i]);
+            }
+        }
+    }
     delete tube;
 
     #endif
@@ -93,7 +118,7 @@ int main (void)
         exit(SOCKETERROR);
     }
     #endif
-
+    delete tube;
     delete svr;
     return 0;
 }

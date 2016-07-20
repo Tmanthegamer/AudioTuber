@@ -4,6 +4,11 @@ int Song::SongsInQueue = 0;
 
 bool Song::operator==(const Song& song) const
 {
+    if(getSongFilePath().empty() && song.getSongFilePath().empty())
+    {
+        return getSongUrl() == song.getSongUrl();
+    }
+    
     return getSongFilePath() == song.getSongFilePath();
 }
 
@@ -68,9 +73,13 @@ void Song::setSongUrl(const std::string url)
     _url = url;
 }
 
-void Song::setSongExists(const bool exists)
+void Song::setSongExists(const std::string name, const std::string fp, const std::string ext)
 {
-    _inSystem = exists;
+    _name = name;
+    _ext = ext;
+    _fp = fp;
+    _url.clear();
+    _inSystem = true;
 }
 
 void Song::setSongExt(const std::string ext)

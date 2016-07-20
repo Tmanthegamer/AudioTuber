@@ -13,15 +13,21 @@ SERVER
     
     SCRIPT
         -[L] if bestaudio fails, attempt to do post-processing instead
+        -[H] Give newly downloaded files to the C++ Server
     
     YOUTUBER
-        -[M] calls the music.sh bash script
+        -[M] programmatically find script/storage/server location
+        -FIN calls the music.sh bash script
         -[H] gets new file info (script modded to dump json file)
-        -[H] loads the newly created file
-        -[M] lists all available songs(files)
+        -[L] loads the newly created file
+        -FIN lists all available songs(files)
+        -[M] use the script to "refresh" the song list with the new 
+             songs downloaded
+        -[H] use regular expressions to get song info
+        
     SONG
-        -[H] SongQueued and SongReady inherits from Song
-        -[H] SongQueued and SongReady inherits from Song
+        -FIN Songs grabbed from filesystem using Boost Library
+        -FIN File exts / filename / filepath
     
     SERVICE
         -[H] create the platform that will listen in for connections using sockets
