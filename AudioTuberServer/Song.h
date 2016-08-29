@@ -35,6 +35,8 @@ public: // Public methods
     Song(std::string name, std::string fp, std::string ext);
 
     Song(std::string url);
+
+    Song() = default;
     
     ~Song();
 
@@ -53,15 +55,15 @@ public: // Public methods
     const bool& isExists();
 
     /* Setters */
-    void setSongName(const std::string name);
+    void setSongName(const std::string& name);
 
-    void setSongFilePath(const std::string name);
+    void setSongFilePath(const std::string& name);
 
-    void setSongUrl(const std::string name);
+    void setSongUrl(const std::string& name);
 
-    void setSongExists(const std::string name, const std::string fp, const std::string ext);
+    void setSongExists(const std::string& name, const std::string& fp, const std::string& ext);
 
-    void setSongExt(const std::string ext);
+    void setSongExt(const std::string& ext);
     
 public: // Public variables
     static int SongsInQueue;

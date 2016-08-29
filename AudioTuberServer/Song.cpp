@@ -58,22 +58,22 @@ std::string Song::getSongExt() const
     return _ext;
 }
 
-void Song::setSongName(const std::string name)
+void Song::setSongName(const std::string& name)
 {
     _name = name;
 }
 
-void Song::setSongFilePath(const std::string fp)
+void Song::setSongFilePath(const std::string& fp)
 {
     _fp = fp;
 }
 
-void Song::setSongUrl(const std::string url)
+void Song::setSongUrl(const std::string& url)
 {
     _url = url;
 }
 
-void Song::setSongExists(const std::string name, const std::string fp, const std::string ext)
+void Song::setSongExists(const std::string& name, const std::string& fp, const std::string& ext)
 {
     _name = name;
     _ext = ext;
@@ -82,7 +82,12 @@ void Song::setSongExists(const std::string name, const std::string fp, const std
     _inSystem = true;
 }
 
-void Song::setSongExt(const std::string ext)
+void Song::setSongExt(const std::string& ext)
 {
     _ext = ext;
+}
+
+const bool& Song::isExists()
+{
+    return _inSystem;
 }

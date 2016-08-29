@@ -37,17 +37,37 @@
 -------------------------------------------------------------------------------------*/
 int main (int argc, char** argv)
 {
+    std::cout << "Hello World" << std::endl;
     Server *svr = new Server();
     Youtuber* tube = new Youtuber();
+    
     #if 1
     switch(argc)
     {
         case 2:
         {
-            tube->FindSongName(argv[1]);
+            std::cout << "argv[1] is:" << argv[1] << std::endl;
+            std::cout << tube->FindSongName(argv[1]) << std::endl;
         }
             break;
         default: //argc > 1
+            std::cout << "Argc is not 2" << std::endl;
+            break;
+    }
+    #endif
+
+    #if 0 
+    //FindSongName tests
+    switch(argc)
+    {
+        case 2:
+        {
+            std::cout << "argv[1] is:" << argv[1] << std::endl;
+            std::cout << tube->FindSongName(argv[1]) << std::endl;
+        }
+            break;
+        default: //argc > 1
+            std::cout << "Argc is not 2" << std::endl;
             break;
     }
     #endif

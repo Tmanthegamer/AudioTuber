@@ -15,8 +15,6 @@ void Download(const char* url)
         //dup2(fd, 2);  // redirect stdout
     }
 
-    
-
     std::vector<std::string> argv;
     argv.push_back(std::string("/bin/bash"));
     argv.push_back(std::string("bash"));
@@ -113,6 +111,7 @@ int Youtuber::UploadSong(char* song)
     return 1; 
 }
 
+//Refreshes the song list by peeking at all the files loaded in Storage
 bool Youtuber::InitializeSongReadyList()
 {
     std::string path(STORAGE);
@@ -169,7 +168,7 @@ std::vector<std::string> Youtuber::GetReadySongList()
 void Youtuber::CheckSongFinished(const char* url)
 {
     std::string path(TEMP);
-    std::string unwanted("info.json");
+    std::string unwanted(".json");
 
     if (!path.empty())
     {
@@ -196,6 +195,34 @@ void Youtuber::CheckSongFinished(const char* url)
     }
 }
 
+std::vector<std::string> Youtuber::GetAllNewJson()
+{
+    std::string path(TEMP);
+    //std::string path(STORAGE);
+    std::string wanted(".json");
+    std::vector<std::string> jsonlist;
+
+    if (!path.empty())
+    {
+        namespace fs = boost::filesystem;
+
+        fs::path apk_path(path);
+        fs::recursive_directory_iterator end;
+
+        for (fs::recursive_directory_iterator i(apk_path); i != end; ++i)
+        {
+            const fs::path cp = (*i);
+            std::string ext = boost::filesystem::extension(cp);
+
+            // Ignore all non-json files
+            if(ext.compare(wanted) != 0) { continue; }
+
+            jsonlist.push_back(cp.string());
+        }
+    }
+    return jsonlist;
+}
+
 std::vector<Song>::iterator Youtuber::FindQueuedSong(const char* url)
 {
     Song s(url);
@@ -211,7 +238,10 @@ bool Youtuber::VerifyDownload(const char* url)
     }
 
     std::string name = FindSongName(url);
-
+    if(name.length() == 0)
+    {
+        return false;
+    }
     //s.setSongExists(name, fp, ext);
     //_ready.push_back(s);
     //_queue.erase(it);
@@ -222,32 +252,106 @@ bool Youtuber::VerifyDownload(const char* url)
 
 std::string const Youtuber::FindSongName(const char* url)
 {
-    std::string path(TEMP);
-    path += "/newsongs.txt";
+    std::vector<std::string> jsonlist;
+    int timer = 0;
 
-    std::ifstream file(path);
-    if (!file)
+    // TODO: check the time to see if more than 3min has past, if so stop this loop
+    while(timer < 50)
     {
-        std::cerr << "Could not open file " << path << std::endl;
-        return std::string();
-    }
-
-    std::string line;
-    std::string url_regex("[-a-zA-Z0-9@:\%._\\+~#=]{2,256}\\.[a-z]{2,6}\b([-a-zA-Z0-9@:\%_\\+.~#?&//=]*)");
-    std::regex base_regex("\"(" + url_regex + ")\":\"(.*)\"");
-    std::smatch pieces;
-
-    while (getline(file, line))
-    {
-        if(std::regex_match(line, pieces, base_regex))
+        jsonlist = GetAllNewJson();
+        for(const auto& s : jsonlist)
         {
-            std::cout << "Size:" << pieces.size() << std::endl;
-            for(size_t i = 0; i < pieces.size(); ++i)
+            std::string("");
+            std::ifstream file;
+            std::string line;
+            file.open(s, std::ifstream::in);
+
+            if (!file.good() || !file.is_open())
             {
-                std::cout << i << "[" << pieces[i].str() << "]" << std::endl;
+                continue;
             }
-        }      
+
+            std::cout << "Working with: " << s << "..." << std::endl;
+            while(file.good() && getline(file, line))
+            {
+                Song song = ParseSongFromJson(line, url);
+                if(song.isExists()) 
+                {
+                    std::cout << song.getSongName() << "\n" 
+                        << song.getSongFilePath() << "\n"
+                        << song.getSongExt() << std::endl;
+                    return song.getSongName(); 
+                }
+            }
+        }
+
+        timer += 5;
+        sleep(5);
     }
+    
+    return "";
+}
+
+Song Youtuber::ParseSongFromJson(std::string line, std::string url)
+{
+    Song s;
+
+    // Raw Strings
+    std::string raw_url = R"(\"webpage_url\": \"(.*?)\")";
+    std::string raw_name = R"(\"fulltitle\": \"(.*?)\")";
+    std::string raw_ext = R"(\"ext\": \"(.*?)\")";
+    std::string raw_filename = R"(\"_filename\": \"(.*?)\")";
+    
+    // Regex with the Raw Strings
+    std::regex r_url(raw_url);
+    std::regex r_name(raw_name);
+    std::regex r_ext(raw_ext);
+    std::regex r_file(raw_filename);
+
+    // Smatch
+    std::smatch url_match, name_match, ext_match, file_match;
+
+    if(std::regex_search(line, url_match, r_url))
+    {
+        
+        #if 0
+        std::cout << "Matches..." << std::endl;
+        for (auto x:url_match) std::cout << x << "||";
+        #endif
+        
+        // Check to see if this is the song we want to parse.
+        if(url.compare(url_match.str(1)) == 0)
+        {
+            std::string name, fp, ext;
+
+            // Extract the name of the song.
+            if(std::regex_search(line, name_match, r_name))
+            {
+                name = name_match.str(1);
+            }
+
+            // Extract the ext of the song.
+            if(std::regex_search(line, ext_match, r_ext))
+            {
+                ext = ext_match.str(1);
+            }
+
+            // Extract the file path of the song.
+            if(std::regex_search(line, file_match, r_file))
+            {
+                fp = file_match.str(1);
+            }
+
+            // If all the requirements were filled, return a Song.
+            if(name.length() > 0 && ext.length() > 0 & fp.length() > 0)
+            {
+                s = Song(name, fp, ext);
+            }
+
+        }
+    }
+
+    return s;
 }
 
 bool Youtuber::SetServer(const Server& svr)

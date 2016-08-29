@@ -34,6 +34,7 @@
 #include <sys/stat.h>        // For mode constants
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/path.hpp"
+#include <boost/algorithm/string.hpp>
 #include <boost/thread.hpp>
 #include "boost/progress.hpp"
 #include "Server.h"
@@ -76,9 +77,11 @@ public:
     bool InitializeSongReadyList();
 
     bool SetServer(const Server& svr);
+
+    Song ParseSongFromJson(std::string first, std::string second);
     
 private: // Private Methods
-
+    std::vector<std::string> GetAllNewJson();
 
 private:
     Server      _svr;
