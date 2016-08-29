@@ -47,6 +47,7 @@ public: // Public methods
     std::string getSongName() const;
 
     std::string getSongFilePath() const;
+    std::string getSongFilePath();
 
     std::string getSongUrl() const;
 

@@ -53,6 +53,12 @@ std::string Song::getSongFilePath() const
     return _fp;
 }
 
+std::string Song::getSongFilePath()
+{
+    std::string copy(_fp);
+    return copy;
+}
+
 std::string Song::getSongExt() const
 {
     return _ext;

@@ -48,6 +48,9 @@
 class Youtuber
 {
 public:
+
+    static void changeFilePath(Song& song);
+
     Youtuber();
     
     ~Youtuber();
@@ -70,7 +73,7 @@ public:
 
     std::vector<Song>::iterator FindQueuedSong(const char* url);
 
-    std::string const FindSongName(const char* url);
+    Song FindDownloadedSongFromURL(const char* url);
 
     bool InitializePaths();
 
@@ -79,6 +82,8 @@ public:
     bool SetServer(const Server& svr);
 
     Song ParseSongFromJson(std::string first, std::string second);
+
+    Song FindReadySongByName(const std::string name);
     
 private: // Private Methods
     std::vector<std::string> GetAllNewJson();

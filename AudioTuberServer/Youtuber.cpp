@@ -205,6 +205,11 @@ std::vector<std::string> Youtuber::GetAllNewJson()
     if (!path.empty())
     {
         namespace fs = boost::filesystem;
+        
+        if(!(boost::filesystem::exists(path)))
+        {
+            boost::filesystem::create_directory(path);
+        }
 
         fs::path apk_path(path);
         fs::recursive_directory_iterator end;
@@ -237,20 +242,26 @@ bool Youtuber::VerifyDownload(const char* url)
         return false;
     }
 
-    std::string name = FindSongName(url);
-    if(name.length() == 0)
+    Song s = FindDownloadedSongFromURL(url);
+    if(!s.isExists())
     {
         return false;
     }
-    //s.setSongExists(name, fp, ext);
-    //_ready.push_back(s);
-    //_queue.erase(it);
 
+    changeFilePathString(s);
 
+    it->setSongExists(s.getSongName(), s.getSongFilePath(), s.getSongExt());
+    std::cerr << "path:" << it->getSongFilePath() << std::endl;
+    _ready.push_back(*it);
+    _queue.erase(it);
+
+    //for(auto& x : _ready) { std::cerr << "Ready:" << x.getSongName() << std::endl; }
+    //for(auto& x : _queue) { std::cerr << "Queue:" << x.getSongName() << std::endl; }
+    
     return true;
 }
 
-std::string const Youtuber::FindSongName(const char* url)
+Song Youtuber::FindDownloadedSongFromURL(const char* url)
 {
     std::vector<std::string> jsonlist;
     int timer = 0;
@@ -274,13 +285,12 @@ std::string const Youtuber::FindSongName(const char* url)
             std::cout << "Working with: " << s << "..." << std::endl;
             while(file.good() && getline(file, line))
             {
-                Song song = ParseSongFromJson(line, url);
-                if(song.isExists()) 
+                Song s = ParseSongFromJson(line, url);
+
+                std::cerr << s.getSongFilePath() << std::endl;
+                if(s.isExists() && boost::filesystem::exists(s.getSongFilePath()) ) 
                 {
-                    std::cout << song.getSongName() << "\n" 
-                        << song.getSongFilePath() << "\n"
-                        << song.getSongExt() << std::endl;
-                    return song.getSongName(); 
+                    return s;
                 }
             }
         }
@@ -289,7 +299,7 @@ std::string const Youtuber::FindSongName(const char* url)
         sleep(5);
     }
     
-    return "";
+    return Song();
 }
 
 Song Youtuber::ParseSongFromJson(std::string line, std::string url)
@@ -357,4 +367,35 @@ Song Youtuber::ParseSongFromJson(std::string line, std::string url)
 bool Youtuber::SetServer(const Server& svr)
 {
     _svr = svr;
+}
+
+Song Youtuber::FindReadySongByName(const std::string name)
+{
+    for(Song& s : _ready)
+    {
+
+    }
+}
+
+void Youtuber::changeFilePath(Song& song)
+{
+    std::string filepath = song.getSongFilePath();
+    
+    if(boost::filesystem::exists(filepath))
+    {
+        const std::string temppath(TEMP);
+        const std::string storagepath(STORAGE);
+
+        size_t start_pos = filepath.find(TEMP);
+        if(start_pos == std::string::npos)
+            return;
+
+        std::string newfilepath = storagepath + std::string(filepath.begin() + temppath.size(), filepath.end());
+
+        boost::filesystem::rename(filepath, newfilepath);
+        boost::filesystem::remove(filepath);
+
+        song.setSongFilePath(filepath);
+    }
+    
 }

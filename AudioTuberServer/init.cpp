@@ -37,7 +37,6 @@
 -------------------------------------------------------------------------------------*/
 int main (int argc, char** argv)
 {
-    std::cout << "Hello World" << std::endl;
     Server *svr = new Server();
     Youtuber* tube = new Youtuber();
     
@@ -47,7 +46,7 @@ int main (int argc, char** argv)
         case 2:
         {
             std::cout << "argv[1] is:" << argv[1] << std::endl;
-            std::cout << tube->FindSongName(argv[1]) << std::endl;
+            std::cout << tube->RunYoutubeDL(argv[1]) << std::endl;
         }
             break;
         default: //argc > 1
