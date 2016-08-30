@@ -69,7 +69,7 @@ int Youtuber::RunYoutubeDL(const char *url)
     }
 
     active = true;
-    active_song = new Song(std::string(url));
+    active_song = new Song(url);
 
     pid_t child = fork();
     if (child == 0)
@@ -248,7 +248,7 @@ bool Youtuber::VerifyDownload(const char* url)
         return false;
     }
 
-    changeFilePathString(s);
+    changeFilePath(s);
 
     it->setSongExists(s.getSongName(), s.getSongFilePath(), s.getSongExt());
     std::cerr << "path:" << it->getSongFilePath() << std::endl;
@@ -397,5 +397,4 @@ void Youtuber::changeFilePath(Song& song)
 
         song.setSongFilePath(filepath);
     }
-    
 }
