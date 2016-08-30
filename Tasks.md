@@ -18,16 +18,17 @@ SERVER
     YOUTUBER
         -[M] programmatically find script/storage/server location
         -FIN calls the music.sh bash script
-        -[H] gets new file info (script modded to dump json file)
-        -[L] loads the newly created file
+        -FIN gets new file info (script modded to dump json file)
+        -FIN loads the newly created file
         -FIN lists all available songs(files)
         -[M] use the script to "refresh" the song list with the new 
-             songs downloaded
-        -[H] use regular expressions to get song info
+             songs downloaded (dump all songs, reload it)
+        -FIN use regular expressions to get song info
         
     SONG
         -FIN Songs grabbed from filesystem using Boost Library
         -FIN File exts / filename / filepath
+        -FIN Single queued song gets converted into a ready song.
     
     SERVICE
         -[H] create the platform that will listen in for connections using sockets
