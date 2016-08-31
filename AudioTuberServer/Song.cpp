@@ -267,9 +267,16 @@ size_t Song::fillPacketWithData(char* data, const long& max)
 {
     long filled = 0;
 
-    if(_dl.pos > _dl.max)
+    if(_dl.pos >= _dl.max)
     {
         return 0;
+    }
+
+    // Check to see if we need to clear the data before filling it when sending it.
+    if(_dl.max - _dl.pos < (long long) max)
+    {
+        long adjust = _dl.max - _dl.pos;
+        memset(data + adjust, 0, max-adjust);
     }
 
     // Seek to the song position and read in the maximum amount of bytes.
@@ -317,6 +324,7 @@ std::string Song::getInitialPacket()
     {
         last_packet = 1;
         last_size = max_size - allocated;
+        packet_num++;
     }
     else
     {
@@ -389,15 +397,22 @@ void Song::downloadCleanup()
 
 char* Song::getPacket()
 {
+    return _dl.songdata;
+}
+
+bool Song::fillPacket(const long& max, long* filled)
+{
     if(!_dl.active)
     {
-        if(!downloadInit(1024)) { return 0; }
+        if(!downloadInit(1024)) { return false; }
     }
 
-    if(fillPacketWithData(_dl.songdata, 1024) == 0)
+    (*filled) = fillPacketWithData(_dl.songdata, max);
+
+    if((*filled) == 0)
     {
-        return 0;
+        return false;
     }
 
-    return _dl.songdata;
+    return true;
 }

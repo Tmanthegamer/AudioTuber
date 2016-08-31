@@ -103,6 +103,8 @@ public: // Public methods
 
     std::string getInitialPacket();
 
+    bool fillPacket(const long& max, long* filled);
+
     char* getPacket();
     
 private: // Private functions

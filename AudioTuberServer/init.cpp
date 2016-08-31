@@ -49,16 +49,21 @@ int main (int argc, char** argv)
             std::cerr << song.getInitialPacket() << std::endl;
             std::cerr << "Go time" << std:: endl;
             
-            char* data = song.getPacket();
+            char* data = 0;
+            int packet_size = 1024;
+            long filled;
             int count = 0;
+
+            if(song.fillPacket(packet_size, &filled)) { data = song.getPacket(); }
 
             while(data != 0)
             {
-                
                 count++;
                 std::string d(data);
                 std::cerr << d;
-                data = song.getPacket();
+                song.fillPacket(packet_size, &filled) ? data = song.getPacket() : data = 0;
+
+                if(filled != packet_size && data != 0) { data[filled-1] = 0; } // Give null character;
             }
             std::cerr << std::endl << std::endl << "Finished with [Packets:" << count << "]" << std::endl;
             break;
