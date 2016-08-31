@@ -41,7 +41,23 @@ int main (int argc, char** argv)
     Youtuber* tube = new Youtuber();
     
     #if 1
+    switch(argc)
+    {
+        case 4:
+        {
+            Song song(argv[1], argv[2], argv[3]);
+            std::cerr << song.getInitialPacket() << std::endl;
+            break;
+        }
+        default:
+            std::cerr << "That's not how you do it." << std::endl;
+            break;
+    }
+    #endif
+
+    #if 0
     // Run Youtube DL (cmd-line youtube argument), dl, parse, move to storage
+    // WORKSSSSSS
     switch(argc)
     {
         case 2:

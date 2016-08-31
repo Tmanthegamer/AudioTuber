@@ -263,6 +263,7 @@ bool Youtuber::VerifyDownload(const char* url)
 
 Song Youtuber::FindDownloadedSongFromURL(const char* url)
 {
+    Song song;
     std::vector<std::string> jsonlist;
     int timer = 0;
 
@@ -285,12 +286,12 @@ Song Youtuber::FindDownloadedSongFromURL(const char* url)
             std::cout << "Working with: " << s << "..." << std::endl;
             while(file.good() && getline(file, line))
             {
-                Song s = ParseSongFromJson(line, url);
+                song = ParseSongFromJson(line, url);
 
-                std::cerr << s.getSongFilePath() << std::endl;
-                if(s.isExists() && boost::filesystem::exists(s.getSongFilePath()) ) 
+                std::cerr << song.getSongFilePath() << std::endl;
+                if(song.isExists() && boost::filesystem::exists(song.getSongFilePath()) ) 
                 {
-                    return s;
+                    return song;
                 }
             }
         }
@@ -299,7 +300,7 @@ Song Youtuber::FindDownloadedSongFromURL(const char* url)
         sleep(5);
     }
     
-    return Song();
+    return song;
 }
 
 Song Youtuber::ParseSongFromJson(std::string line, std::string url)
