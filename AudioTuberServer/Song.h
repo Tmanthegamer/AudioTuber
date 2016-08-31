@@ -34,9 +34,10 @@
 
 typedef struct DownloadInfo
 {
-    long long   pos = 0;
-    long long   max = 0;
-    char*       songdata;
+    long long       pos = 0;
+    long long       max = 0;
+    bool            active = false;
+    char*           songdata;
 } DownloadInfo;
 
 class Song
@@ -96,19 +97,26 @@ public: // Public methods
     void setSongUrl(const std::string& name);
 
     void setSongExists(const std::string& name, const std::string& fp, const std::string& ext);
-    void setSongExists(bool exists = false);
+    void setSongExists(const bool& exists = false);
 
     void setSongExt(const std::string& ext);
 
     std::string getInitialPacket();
 
+    char* getPacket();
     
 private: // Private functions
-    bool setSongMaxSize(const long long& size = 0);
+    bool setSongMaxSize(const long long& size = -1);
 
     void resetDownloadPosition();
 
-    void setDownloadPosition(const long long pos = 0LL);
+    void setDownloadPosition(const long long& pos = 0LL);
+
+    size_t fillPacketWithData(char* data, const long& max);
+
+    bool downloadInit(const size_t& packet_size);
+
+    void downloadCleanup();
 
     template <class T>
     std::string CreateJsonKeyValue(const std::string& key, const T& value, bool comma = false);

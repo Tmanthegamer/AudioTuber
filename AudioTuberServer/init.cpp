@@ -47,6 +47,20 @@ int main (int argc, char** argv)
         {
             Song song(argv[1], argv[2], argv[3]);
             std::cerr << song.getInitialPacket() << std::endl;
+            std::cerr << "Go time" << std:: endl;
+            
+            char* data = song.getPacket();
+            int count = 0;
+
+            while(data != 0)
+            {
+                
+                count++;
+                std::string d(data);
+                std::cerr << d;
+                data = song.getPacket();
+            }
+            std::cerr << std::endl << std::endl << "Finished with [Packets:" << count << "]" << std::endl;
             break;
         }
         default:

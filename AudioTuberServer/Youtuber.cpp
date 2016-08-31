@@ -278,22 +278,20 @@ Song Youtuber::FindDownloadedSongFromURL(const char* url)
             std::string line;
             file.open(s, std::ifstream::in);
 
-            if (!file.good() || !file.is_open())
-            {
-                continue;
-            }
-
             std::cout << "Working with: " << s << "..." << std::endl;
-            while(file.good() && getline(file, line))
+            while(file.is_open() && file.good() && getline(file, line))
             {
                 song = ParseSongFromJson(line, url);
 
                 std::cerr << song.getSongFilePath() << std::endl;
                 if(song.isExists() && boost::filesystem::exists(song.getSongFilePath()) ) 
                 {
+                    file.close();
                     return song;
                 }
             }
+
+            file.close();
         }
 
         timer += 5;

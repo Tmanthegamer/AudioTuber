@@ -45,7 +45,7 @@ Song& Song::operator= (Song && song)
         song.setSongName("");
         song.resetDownloadPosition();
         song.setSongUrl("");
-        song.setSongMaxSize(0);
+        song.setSongMaxSize();
         song.setSongFilePath("");
         song.setSongExt("");
         song.setSongExists(false);
@@ -91,6 +91,8 @@ Song::Song(const Song& song)
 Song::~Song()
 {
     if(!_inSystem) SongsInQueue--;
+    
+    downloadCleanup();
 }
 
 std::string Song::getSongName() const
@@ -205,7 +207,7 @@ void Song::setSongExists(const std::string& name, const std::string& fp, const s
     setSongMaxSize();
 }
 
-void Song::setSongExists(bool exists)
+void Song::setSongExists(const bool& exists)
 {
     _inSystem = exists;
 }
@@ -222,11 +224,11 @@ bool Song::setSongMaxSize(const long long& size)
         return false;
     }
     
-    if(size == 0) // Default argument provided
+    if(size == -1) // Default argument provided
     {   
         std::ifstream in(_fp.c_str(), std::ifstream::ate | std::ifstream::binary);
         const long long temp = in.tellg(); 
-
+        in.close();
         if(temp < 0)
             return false;
 
@@ -250,10 +252,45 @@ void Song::resetDownloadPosition()
     setDownloadPosition();
 }
 
-void Song::setDownloadPosition(const long long pos)
+void Song::setDownloadPosition(const long long& pos)
 {
-    if(pos >= 0)       
+    if(pos >= 0)      
+    {
+        
+
         _dl.pos = pos;
+    } 
+}
+
+// Max is the maximum packet size
+size_t Song::fillPacketWithData(char* data, const long& max)
+{
+    long filled = 0;
+
+    if(_dl.pos > _dl.max)
+    {
+        return 0;
+    }
+
+    // Seek to the song position and read in the maximum amount of bytes.
+    std::ifstream in(_fp.c_str(), std::ifstream::ate | std::ifstream::binary);
+    in.seekg (_dl.pos, in.beg);
+
+    in.read (data, max);
+    in.close();
+
+    // Get the amount of bytes read and add it to the position if successful.
+    filled = in.gcount();
+    if(filled > 0)
+    {
+        _dl.pos += filled;
+    }
+    else
+    {
+        filled = 0;
+    }
+
+    return filled;
 }
 
 std::string Song::getInitialPacket()
@@ -310,6 +347,57 @@ std::string Song::CreateJsonKeyValue(const std::string& key, const T& value, boo
         oss << ",";
         
     }
-    
+
     return oss.str();
+}
+
+bool Song::downloadInit(const size_t& packet_size)
+{
+    if(packet_size == 0 || _dl.active || !setSongMaxSize()) 
+    { 
+        return false; 
+    }
+
+    // Make room for the data
+    _dl.songdata = (char*) malloc(sizeof(char) * (packet_size+1));
+    memset(_dl.songdata, 0, packet_size+1);
+    
+    if(_dl.songdata == NULL) 
+    { 
+        return false; 
+    }
+
+    _dl.max = _maxsize;
+    _dl.pos = 0LL;
+    _dl.active = true;
+
+    return true;
+}
+
+void Song::downloadCleanup()
+{
+    if(_dl.active)
+    {
+        free(_dl.songdata);
+
+        _dl.max = 0LL;
+        _dl.pos = 0LL;
+        _dl.active = false;
+    }
+
+}
+
+char* Song::getPacket()
+{
+    if(!_dl.active)
+    {
+        if(!downloadInit(1024)) { return 0; }
+    }
+
+    if(fillPacketWithData(_dl.songdata, 1024) == 0)
+    {
+        return 0;
+    }
+
+    return _dl.songdata;
 }
