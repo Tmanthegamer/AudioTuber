@@ -40,7 +40,8 @@ int main (int argc, char** argv)
     Server *svr = new Server();
     Youtuber* tube = new Youtuber();
     
-    #if 1
+    #if 0
+    // Successful generic text packetizing
     switch(argc)
     {
         case 4:
@@ -74,7 +75,7 @@ int main (int argc, char** argv)
     }
     #endif
 
-    #if 0
+    #if 1
     // Run Youtube DL (cmd-line youtube argument), dl, parse, move to storage
     // WORKSSSSSS
     switch(argc)

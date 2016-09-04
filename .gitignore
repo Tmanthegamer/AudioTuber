@@ -2,52 +2,52 @@
 ## Client Files
 ####################################
 # built application files
-AudioTuberClient/*.apk
-AudioTuberClient/*.ap_
+Client/*.apk
+Client/*.ap_
 
 # files for the dex VM
-AudioTuberClient/*.dex
+Client/*.dex
 
 # Java class files
-AudioTuberClient/*.class
+Client/*.class
 
 # generated files
-AudioTuberClient/bin/
-AudioTuberClient/gen/
-AudioTuberClient/out/
-AudioTuberClient/build/
+Client/bin/
+Client/gen/
+Client/out/
+Client/build/
 
 # Local configuration file (sdk path, etc)
-AudioTuberClient/local.properties
+Client/local.properties
 
 # Eclipse project files
-AudioTuberClient/.classpath
-AudioTuberClient/.project
+Client/.classpath
+Client/.project
 
 # Windows thumbnail db
-AudioTuberClient/.DS_Store
+Client/.DS_Store
 
 # IDEA/Android Studio project files, because
 # the project can be imported from settings.gradle
-AudioTuberClient/.idea
-AudioTuberClient/*.iml
+Client/.idea
+Client/*.iml
 
 # Old-style IDEA project files
-AudioTuberClient/*.ipr
-AudioTuberClient/*.iws
+Client/*.ipr
+Client/*.iws
 
 # Local IDEA workspace
-AudioTuberClient/.idea/workspace.xml
+Client/.idea/workspace.xml
 
 # Gradle cache
-AudioTuberClient/.gradle
+Client/.gradle
 
 # Sandbox stuff
-AudioTuberClient/_sandbox
+Client/_sandbox
 
 ####################################
 ## Server Files
 ####################################
-AudioTuberServer/storage/*
-AudioTuberServer/temp
-AudioTuberServer/*.out
+Server/storage/*
+Server/temp
+Server/*.out

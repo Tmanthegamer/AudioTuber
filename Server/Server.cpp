@@ -255,7 +255,7 @@ int Server::ReceivePacketFromClient(int client_sd, int index)
 
 int Server::ReceiveHeaderFromClient(int client_sd, int index, char* data)
 {
-    char    *bp = data;              //Pointer to the receiving buffer.
+    char    *bp = data;             //Pointer to the receiving buffer.
     size_t  bytes_to_read = 0;      //Ensures that the buffer will not overflow
     size_t  total_bytes_read = 0;   //Running total of the bytes received.
     size_t  n = 0;                  //Keeps track of the incoming bytes.
@@ -602,4 +602,49 @@ void Server::AddUserToConnections(char *ipAddress, int socket)
 {
     std::string temp(ipAddress);
     _clientUsernameMap.insert(std::make_pair(socket, temp));
+}
+
+// Initializes the socket to prepare for sending/receiving.
+int Server::OpenSocket()
+{
+    int ret = SUCCESS;
+
+    if((ret = InitListenSocket() != SUCCESS)) 
+    {
+        _error = std::string("Can't initiate listen socket.");
+        return ret;
+    }
+
+    if((ret = SetSocketOpt() != SUCCESS))
+    {
+        _error = std::string("Can't set the socket operation.");
+        return ret;
+    }
+
+    if((ret = BindSocketAndListen() != SUCCESS))
+    {
+        _error = std::string("Socket error, unable to bind and listen.");
+        return ret;
+    }
+
+    return ret;
+}
+
+// Clean up server resources here.
+int Server::CloseSocket()
+{
+    int ret = SUCCESS;
+
+    /*
+    TODO:
+    1) Close all of the current connections to clients.
+    2) Remove all of the clients from the list.
+    3) Free any created resources
+    4) Any errors in the above steps will set an error code but will always
+        close the listen socket.
+    */
+
+    close(_listen_sd);
+
+    return ret;
 }

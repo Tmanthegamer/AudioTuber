@@ -40,10 +40,10 @@
 #include "Server.h"
 #include "Song.h"
 
-#define STORAGE     "/home/tyler/AudioTuber/AudioTuberServer/storage"
-#define SERVER      "/home/tyler/AudioTuber/AudioTuberServer/"
-#define SCRIPT      "/home/tyler/AudioTuber/AudioTuberServer/music.sh"
-#define TEMP        "/home/tyler/AudioTuber/AudioTuberServer/temp"
+#define STORAGE     "/home/tylerdeveloper/AudioTuber/Server/storage"
+#define SERVER      "/home/tylerdeveloper/AudioTuber/Server/"
+#define SCRIPT      "/home/tylerdeveloper/AudioTuber/Server/music.sh"
+#define TEMP        "/home/tylerdeveloper/AudioTuber/Server/temp"
 
 class Youtuber
 {

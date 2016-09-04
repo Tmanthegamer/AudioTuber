@@ -31,9 +31,19 @@ SERVER
         -FIN Single queued song gets converted into a ready song.
     
     SERVICE
-        -[H] create the platform that will listen in for connections using sockets
+	-[L] Refine the clean up resources
+	-[H] Acquire packets from Youtuber (check if packets are good)
+	-[H] Send packets to a client
+	-[M] Design a struct for a client's information and use maps
+	-[L] Remove excess code that was from previous project
         -[M] create authentication method to connect to ONLY one device
-        -[~] determine streaming method for android, TCP/IP 
+        -FIN TCP will be used to transmit the data
+	-[L] Create wrapper functions that will handle sending the different data types
+		1) Preparing to send the data (data init)		
+		2) Sending a header (song info, how many packets, etc.)
+		3) Sending all the packets (actual data sending)
+		4) Sending the final packet (data verification)
+		5) Clean up after sending the data.
         
     PLAYLIST
         -[L] get all of the songs and send list to client 

@@ -138,6 +138,10 @@ public:
 
     int CloseClient(int client_sd, int index);
 
+    int OpenSocket();
+
+    int CloseSocket();
+
 private:
     int _maxi;                      //Running total of all clients.
     int _listen_sd;                 //Listening socket
@@ -152,7 +156,8 @@ private:
     std::map<int, std::string>      _clientUsernameMap; 
     
     //Vector of client sockets
-    std::vector<int>                _client;      
+    std::vector<int>                _client;
+    std::string                     _error;
 };
 
 #endif //CHAT_SERVER_H

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 URL=${1}
-TUBER="/home/tyler/AudioTuber/AudioTuberServer"
+TUBER="/home/tylerdeveloper/AudioTuber/Server"
 TEMP="${TUBER}/temp"
 STORAGE="storage/%(title)s.%(ext)s"
 
